@@ -4,7 +4,12 @@ import java.util.stream.IntStream;
 
 public class TestUtils {
 
-    private static int[] array = new Random().ints(50_000, 50_000, 100_000).toArray();
+    private static int[] array;
+
+    static {
+        System.out.println("Initialisation du random");
+        array = new Random().ints(50_000, 50_000, 100_000).toArray();
+    }
 
     public static int[] randomGenerator() {
         return new Random().ints(50_000, 50_000, 100_000).toArray();
@@ -45,8 +50,8 @@ public class TestUtils {
 
     public static void warmUp(Function<int[], String> functionToTest) {
         for (int i = 0; i < 1_000; i++) {
-            int[] data = array;
-            functionToTest.apply(randomGenerator());
+            int[] data = randomGenerator();
+            functionToTest.apply(data);
         }
     }
 
