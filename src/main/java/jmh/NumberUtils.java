@@ -1,3 +1,5 @@
+package jmh;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -28,5 +30,11 @@ public class NumberUtils {
         }
 
         return result.toString();
+    }
+
+    public static void main(String[] args) {
+        int[] values = {2, 3, 4, 5, 6, 7, 8, 9};
+        double average = Arrays.stream(values).skip(2).limit(6).count();
+        System.out.println("average : " + average);
     }
 }

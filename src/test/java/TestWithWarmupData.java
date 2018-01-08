@@ -1,3 +1,4 @@
+import jmh.NumberUtils;
 import org.junit.Test;
 
 public class TestWithWarmupData {
