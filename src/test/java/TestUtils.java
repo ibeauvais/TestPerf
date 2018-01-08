@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -15,26 +18,29 @@ public class TestUtils {
         return new Random().ints(50_000, 50_000, 100_000).toArray();
     }
 
-    public static void testAveragePerformanceMilli(Function<int[], String> functionToTest,
-                                                   String prefix,
-                                                   int iterationCount) {
-        long end = 0;
-        for (int i = 0; i < iterationCount; i++) {
-            end += getMilliTime(functionToTest, array);
-        }
-
-        System.out.println("duration of " + prefix + end / iterationCount);
-    }
 
     public static void testAveragePerformanceNano(Function<int[], String> functionToTest,
                                                   String prefix,
                                                   int iterationCount) {
-        long end = 0;
+        List<Long> values = new ArrayList<>(iterationCount);
         for (int i = 0; i < iterationCount; i++) {
-            end += getNanoTime(functionToTest, array);
+            values.add(getNanoTime(functionToTest, array));
         }
+        double fivePercent = 5d / 100 * iterationCount;
+        //limit coming after skip, we have to account for the first 5 percent in our calculations
+        double ninetyFivePercent = 90d / 100 * iterationCount;
 
-        System.out.println("duration of " + prefix + end / iterationCount);
+        Collections.sort(values);
+        double end = values.stream()
+                .skip((long) fivePercent)
+                .limit((long) ninetyFivePercent)
+                .mapToLong(Long::longValue)
+                .average()
+                .getAsDouble();
+
+        long ecart = values.get(values.size() - 1) - values.get(0);
+        System.out.println("ecart entre la plus grande valeur et la plus petite : " + ecart);
+        System.out.println("durée moyenne de " + prefix + end);
     }
 
     public static void testPerformanceMilli(Function<int[], String> functionToTest, String prefix) {
@@ -80,7 +86,6 @@ public class TestUtils {
         functionToTest.apply(data);
         return System.nanoTime() - nanoTime;
     }
-
 
 
     private static int[] getData() {
