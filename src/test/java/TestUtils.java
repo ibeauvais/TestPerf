@@ -1,3 +1,5 @@
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.stream.IntStream;
 public class TestUtils {
 
     private static int[] array;
+    private static NumberFormat format = new DecimalFormat("#0.00");
 
     static {
         System.out.println("Initialisation du random");
@@ -40,7 +43,7 @@ public class TestUtils {
 
         long ecart = values.get(values.size() - 1) - values.get(0);
         System.out.println("ecart entre la plus grande valeur et la plus petite : " + ecart);
-        System.out.println("durée moyenne de " + prefix + end);
+        System.out.println("durée moyenne de " + prefix + format.format(end));
     }
 
     public static void testPerformanceMilli(Function<int[], String> functionToTest, String prefix) {

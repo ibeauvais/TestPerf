@@ -15,7 +15,7 @@ public class TestAverage {
 
     @Parameters
     public static Collection<Integer> iterations() {
-        Integer[] values = {10, 100, 1000, 10000};
+        Integer[] values = {1000};
         return Arrays.asList(values);
     }
 
